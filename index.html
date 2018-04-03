@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		<title>CitySelector</title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/reset.css" />
+	<style type="text/css">
+		.div {
+			margin: 0 auto;
+			width: 400px;
+			border: 1px solid #F00
+		}
+	</style>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/picker.min.js"></script>
+	<script type="text/javascript">
+		var proviceDatas = [];
+		$(function() {
+			$.getJSON("data/provinces.json", function(provices) {
+				$.each(provices, function(index, provice) {
+					var temp = new Object();
+					temp.text = provice.name;
+					temp.value = provice.code;
+					proviceDatas.push(temp);
+				});
+				var provicePicker = new Picker({
+					data: [proviceDatas],//数据源
+					selectedIndex: [[0]],//默认选择的项 index
+					title: '地址选择'//选择器的标题
+				});
+
+				provicePicker.on('picker.select', function(selectedVal, selectedIndex) {
+					$("#provice").val(proviceDatas[selectedIndex[0]].text);
+					console.log(proviceDatas[selectedIndex[0]].value);
+				});
+
+				provicePicker.on('picker.change', function(index, selectedIndex) {
+					console.log(index);
+				});
+
+				provicePicker.on('picker.valuechange', function(selectedVal, selectedIndex) {
+					console.log(selectedVal);
+				});
+				$("#provice").click(function() {
+					provicePicker.show();
+				});
+			})
+		});
+	</script>
+
+	<body>
+		<div class="div">
+			<ul>
+				<li>
+					收货人:&nbsp;&nbsp;&nbsp;<input type="text" class="input" />
+				</li>
+				<li>
+					手机号:&nbsp;&nbsp;&nbsp;<input class="input" />
+				</li>
+				<li>
+					收货地址:<input id="provice" type="text" class="input" readonly="readonly" value="请选择城市" />
+				</li>
+				<li>
+					详细地址:<input type="text" class="input" />
+				</li>
+			</ul>
+		</div>
+	</body>
+
+</html>
